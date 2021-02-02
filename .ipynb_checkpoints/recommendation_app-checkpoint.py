@@ -21,8 +21,8 @@ def user_input_features():
     energy_kcal=st.slider('Targeted Daily Intake (kcal)', min_value=1000, max_value=6000, step=10)
     days=st.slider('Shopping Volume (Days)  (e.g. 6 days)', min_value=3, max_value=7, step=1)
 
-    data={'Supermarket': market,'Daily Intake (kcal)': energy_kcal,'Shopping Volume (Days)': days}
-    user_if=pd.DataFrame(data, index=['Target'])
+    data={'Target': [market, energy_kcal, days]}
+    user_if=pd.DataFrame(data, index=['store','kcal','days'])
     return user_if
 
 def user_input_processing(kcal, days):
@@ -101,7 +101,8 @@ def create_img_url_list(name_df, source_df):
 def create_barplot(content_vector1, content_vector2):
     con1=[round(float(ele)*100,2) for ele in content_vector1]
     con2=[round(float(ele)*100,2) for ele in content_vector2]
-    fig, ((ax1, ax2))=plt.subplots(1,2, sharey=True, figsize=(12,5))
+    fig, ((ax1, ax2))=plt.subplots(2,1, figsize=(5,10))
+    fig.subplots_adjust(hspace = 0.5)
     x=['Energy','Fat','Saturated_fat','Carbohydrate','of_which_sugars','Fibre','Protein','Salt']
     y0=np.repeat(100,8)
     y1=con1
@@ -118,6 +119,7 @@ def create_barplot(content_vector1, content_vector2):
     ax1.set_ylim([0, 200])
     ax2.set_ylim([0, 200])
     ax1.set_ylabel('Nutrient Content/Target Amount (%)')
+    ax2.set_ylabel('Nutrient Content/Target Amount (%)')
     ax1.legend(loc=2)
     ax2.legend(loc=2)
     
@@ -139,17 +141,26 @@ def displayMe():
     my_expander = st.beta_expander("See detail by typical values", expanded=False)
     with my_expander:
         st.write(target_nutrition)
+        
     st.write("##")
     
     st.write("Shopping Mix 1")
     mix_list1
     
+    st.write("##")
+    
     st.image(img_url_list1)
+    
+    st.write("##")
     
     st.write("Shopping Mix 2")
     mix_list2
     
+    st.write("##")
+    
     st.image(img_url_list2)
+    
+    st.write("##")
     
     st.write("Shopping Mixes: Nutrition Target Achievement %")
     create_barplot(output_list[0].loc[0,'Content'], output_list[1].loc[0,'Content'])
@@ -162,7 +173,7 @@ st.header("Tell Me About Your Target Calories")
 item_df=get_metadata()
 source_df=get_source()
 user_if=user_input_features()
-target_nutrition=user_input_processing(user_if.iloc[0,1], user_if.iloc[0,2])
+target_nutrition=user_input_processing(user_if.iloc[1,0], user_if.iloc[2,0])
 output_list=recommendation(item_df, target_nutrition.iloc[:,0])
 mix_list1=create_mix_list(output_list[0])
 mix_list2=create_mix_list(output_list[1])
