@@ -128,6 +128,7 @@ def displayMe():
     """
     import sys
     thismodule = sys.modules[__name__]
+    st.write("Tell Me Your Target Nutriton & Shopping Volume")
     st.write("Your Information")
     user_if
     st.write("Your Target Nutrition")
@@ -150,7 +151,6 @@ def displayMe():
     
 st.title("Make your grocery shopping more balanced!")
 # excute functions
-st.sidebar.title("Your Target Nutriton & Shopping")
 item_df=get_metadata()
 source_df=get_source()
 user_if=user_input_features()
