@@ -96,6 +96,8 @@ def create_img_url_list(name_df, source_df):
     return img_url_list
 
 
+
+
 def create_barplot(content_vector1, content_vector2):
     con1=[round(float(ele)*100,2) for ele in content_vector1]
     con2=[round(float(ele)*100,2) for ele in content_vector2]
@@ -128,11 +130,16 @@ def displayMe():
     """
     import sys
     thismodule = sys.modules[__name__]
-    st.write("Tell Me Your Target Nutriton & Shopping Volume")
+
     st.write("Your Information")
     user_if
-    st.write("Your Target Nutrition")
-    target_nutrition
+    
+    st.write("##")
+    
+    my_expander = st.beta_expander("See detail by typical values", expanded=False)
+    with my_expander:
+        st.write(target_nutrition)
+    st.write("##")
     
     st.write("Shopping Mix 1")
     mix_list1
@@ -150,6 +157,7 @@ def displayMe():
 
     
 st.title("Make your grocery shopping more balanced!")
+st.header("Tell Me About Your Target Calories")
 # excute functions
 item_df=get_metadata()
 source_df=get_source()
@@ -160,4 +168,7 @@ mix_list1=create_mix_list(output_list[0])
 mix_list2=create_mix_list(output_list[1])
 img_url_list1=create_img_url_list(mix_list1, source_df)
 img_url_list2=create_img_url_list(mix_list2, source_df)
+st.header("Grocery Items According To Your Target")
 displayMe()
+
+
